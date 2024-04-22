@@ -32,10 +32,14 @@ y_control = speed
 pontos = 0
 fonte = pygame.font.SysFont('arial', 40, True, True)
 
-snakelength = 40
+snakelength = 5
 snakelist = []
 
 die = False
+lvl1 = True
+lvl1begin = False
+start = True
+obstaclerun = False
 def increasesnake(snakelist):
     for XeY in snakelist:
         pygame.draw.rect(screen, (0, 255, 0), (XeY[0], XeY[1], snakesize, snakesize))
@@ -53,11 +57,27 @@ def restartGame():
     snakelist = []
     die = False
 
+
+
+def buildobstacles():
+    global obstacle
+    obstaclex = 50
+    obstacley = 100
+    obsizex = 50
+    obsizey = 100
+
+    obstacle = pygame.draw.rect(screen, (255, 0, 0), (obstaclex, obstacley, obsizex, obsizey))
+
+
 while True:
 
-    start = True
-
     while start:
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                exit()
+
         screen.fill('white')
         startmessage = f'Aperte qualquer botao para inciar'
         formatted_startmessage = fonte.render(startmessage, True, 'black')
@@ -71,10 +91,20 @@ while True:
     snake = pygame.draw.rect(screen, (0, 255, 0), (x, y, snakesize, snakesize))
     apple = pygame.draw.rect(screen, (255, 0, 0), (x_m, y_m, applesize, applesize))
 
+
+    '''text-messages'''
     message = f'Pontos: {pontos}'
+    lvlmessage1 = f'Get 15 points'
+    lvlmessage2 = f'get 20 points, watchout the obstacles'
+    lvlmessage2b = f'press c to continue'
+    formatted_lvlmessage2 = fonte.render(lvlmessage2, True, 'black')
+    formatted_lvlmessage2b = fonte.render(lvlmessage2b, True, 'black')
+    formatted_lvlmessage1 = fonte.render(lvlmessage1, True, 'black')
     gameOverMessage = f'Você perdeu, aperte \'r\' para reiniciar'
     formatted_gameOver = fonte.render(gameOverMessage, True, 'black')
     formatted_text = fonte.render(message, True, 'black')
+
+
     increasesnake(snakelist)
 
     for event in pygame.event.get():
@@ -107,7 +137,34 @@ while True:
                 y_control = speed
                 x_control = 0
 
+    if pontos >= 5:
+        while lvl1:
+            screen.fill('white')
+            screen.blit(formatted_lvlmessage2, (100, 200))
+            screen.blit(formatted_lvlmessage2b, (100, 100))
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    exit()
+            pygame.display.update()
+            if pygame.key.get_pressed()[K_c]:
+                lvl1 = False
+                lvl1begin = True
+                obstaclerun = True
 
+        if lvl1begin == True:
+            speed = 5
+            pontos = 0
+            snakelength = 5
+            x = width / 2
+            y = height / 2
+
+            headlist = []
+            snakelist = []
+            lvl1begin = False
+
+    if obstaclerun == True:
+        buildobstacles()
 
     if x > width:
         x = 0
@@ -156,6 +213,8 @@ while True:
 
     x += x_control
     y += y_control
+
+
 
     screen.blit(formatted_text, (0, 500))
     clock = pygame.time.Clock()
