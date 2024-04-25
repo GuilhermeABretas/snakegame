@@ -66,7 +66,7 @@ def buildobstacles():
     obsizex = 50
     obsizey = 100
 
-    obstacle = pygame.draw.rect(screen, (255, 0, 0), (obstaclex, obstacley, obsizex, obsizey))
+    obstacle = pygame.draw.rect(screen, (0, 0, 255), (obstaclex, obstacley, obsizex, obsizey))
 
 
 while True:
@@ -79,9 +79,9 @@ while True:
                 exit()
 
         screen.fill('white')
-        startmessage = f'Aperte qualquer botao para inciar'
+        startmessage = f'Press \'c\' to begin'
         formatted_startmessage = fonte.render(startmessage, True, 'black')
-        screen.blit(formatted_startmessage, (100, 200))
+        screen.blit(formatted_startmessage, (220, 220))
         if pygame.key.get_pressed()[K_c]:
             start = False
         pygame.display.update()
@@ -185,6 +185,7 @@ while True:
     headlist.append(x)
     headlist.append(y)
     snakelist.append(headlist)
+    print(headlist)
 
     '''se a cobra colidir em si mesma'''
 
@@ -200,6 +201,8 @@ while True:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
                         restartGame()
+                        obstaclerun = False
+                        lvl1begin = True
             pygame.display.update()
 
     if snake.colliderect(apple):
@@ -213,6 +216,7 @@ while True:
 
     x += x_control
     y += y_control
+
 
 
 
