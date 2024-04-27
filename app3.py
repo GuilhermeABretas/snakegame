@@ -8,9 +8,6 @@ pygame.init()
 width = 840
 height = 640
 
-hitsound = pygame.mixer.Sound('hitsound2.wav')
-hitsound.set_volume(0.1)
-pygame.mixer.music.set_volume(0.1)
 
 pygame.display.set_caption('TesteJogo')
 
@@ -209,7 +206,6 @@ while True:
         x_m = random.randint(0, 800)
         y_m = random.randint(0, 600)
         pontos = pontos + 1
-        hitsound.play()
         snakelength += 3
         speed += 0.2
 
