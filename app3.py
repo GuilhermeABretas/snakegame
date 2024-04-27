@@ -19,8 +19,14 @@ y=320
 snakesize = 30
 applesize = 30
 
-x_m = random.randint(0, 800)
-y_m = random.randint(0, 600)
+
+randXa = 0
+randXb = 800
+randYa = 0
+randYb = 600
+
+x_m = random.randint(randXa, randXb)
+y_m = random.randint(randYa, randYb)
 
 speed = 5
 x_control = speed
@@ -55,33 +61,31 @@ def restartGame():
     die = False
 
 
+def initialScreen():
+    global start
+    screen.fill('white')
+    startmessage = f'Press \'c\' to begin'
+    formatted_startmessage = fonte.render(startmessage, True, 'black')
+    lvlmessage1 = f'Get 15 points'
+    formatted_lvlmessage1 = fonte.render(lvlmessage1, True, 'black')
+    screen.blit(formatted_startmessage, (220, 250))
+    screen.blit(formatted_lvlmessage1, (220, 160))
+    if pygame.key.get_pressed()[K_c]:
+        start = False
+    pygame.display.update()
 
-def buildobstacles():
-    global obstacle
-    obstaclex = 50
-    obstacley = 100
-    obsizex = 50
-    obsizey = 100
-
-    obstacle = pygame.draw.rect(screen, (0, 0, 255), (obstaclex, obstacley, obsizex, obsizey))
 
 
 while True:
 
+    #initial screen#
     while start:
-
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 exit()
 
-        screen.fill('white')
-        startmessage = f'Press \'c\' to begin'
-        formatted_startmessage = fonte.render(startmessage, True, 'black')
-        screen.blit(formatted_startmessage, (220, 220))
-        if pygame.key.get_pressed()[K_c]:
-            start = False
-        pygame.display.update()
+        initialScreen()
 
 
     screen.fill('white')
@@ -91,12 +95,8 @@ while True:
 
     '''text-messages'''
     message = f'Pontos: {pontos}'
-    lvlmessage1 = f'Get 15 points'
-    lvlmessage2 = f'get 20 points, watchout the obstacles'
+    lvlmessage2 = f'get 20 points, watchout for the obstacles'
     lvlmessage2b = f'press c to continue'
-    formatted_lvlmessage2 = fonte.render(lvlmessage2, True, 'black')
-    formatted_lvlmessage2b = fonte.render(lvlmessage2b, True, 'black')
-    formatted_lvlmessage1 = fonte.render(lvlmessage1, True, 'black')
     gameOverMessage = f'Você perdeu, aperte \'r\' para reiniciar'
     formatted_gameOver = fonte.render(gameOverMessage, True, 'black')
     formatted_text = fonte.render(message, True, 'black')
@@ -134,35 +134,10 @@ while True:
                 y_control = speed
                 x_control = 0
 
-    if pontos >= 5:
-        while lvl1:
-            screen.fill('white')
-            screen.blit(formatted_lvlmessage2, (100, 200))
-            screen.blit(formatted_lvlmessage2b, (100, 100))
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    exit()
-            pygame.display.update()
-            if pygame.key.get_pressed()[K_c]:
-                lvl1 = False
-                lvl1begin = True
-                obstaclerun = True
-
-        if lvl1begin == True:
-            speed = 5
-            pontos = 0
-            snakelength = 5
-            x = width / 2
-            y = height / 2
-
-            headlist = []
-            snakelist = []
-            lvl1begin = False
-
-    if obstaclerun == True:
-        buildobstacles()
-
+    if pontos >= 3:
+        restartGame()
+            #começa o level 2             
+        
     if x > width:
         x = 0
     if x < -40:
@@ -173,8 +148,6 @@ while True:
         y =  0
 
 
-
-
     if len(snakelist) > snakelength:
             del snakelist[0]
 
@@ -182,7 +155,7 @@ while True:
     headlist.append(x)
     headlist.append(y)
     snakelist.append(headlist)
-    print(headlist)
+
 
     '''se a cobra colidir em si mesma'''
 
@@ -198,8 +171,6 @@ while True:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
                         restartGame()
-                        obstaclerun = False
-                        lvl1begin = True
             pygame.display.update()
 
     if snake.colliderect(apple):
@@ -212,7 +183,6 @@ while True:
 
     x += x_control
     y += y_control
-
 
 
 
