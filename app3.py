@@ -1,5 +1,6 @@
 import pygame
 import random
+from random import choice
 from pygame.locals import *
 from sys import exit
 
@@ -39,7 +40,10 @@ snakelist = []
 die = False
 lvl1 = True
 lvl1loop = True
+lvl2loop = True
+lvl2 = True
 start = True
+
 
 
 def increasesnake(snakelist):
@@ -62,7 +66,7 @@ def restartGame():
 
 
 def restartAll():
-    global pontos, snakelist, snakelength, x, y, headlist, die, speed, obstaclerun, lvl1, lvl1loop
+    global pontos, snakelist, snakelength, x, y, headlist, die, speed, obstaclerun, lvl1, lvl1loop, obstaclerun2, lvl2, begin
 
     speed = 5
     pontos = 0
@@ -74,26 +78,32 @@ def restartAll():
     snakelist = []
     die = False
     obstaclerun = False
+    obstaclerun2 = False
     lvl1 = True
     lvl1loop = True
+    lvl2 = True
+    begin = True
+
     print('working')
 
 def initialScreen():
     global start
     screen.fill('white')
-    startmessage = f'Press \'c\' to begin'
+    startmessage = f'Press SPACE to begin'
     formatted_startmessage = fonte.render(startmessage, True, 'black')
-    lvlmessage1 = f'Get 10 points for the next level'
-    formatted_lvlmessage1 = fonte.render(lvlmessage1, True, 'black')
+    lvlmessage1 = f'Level 1: get 10 points for the next level'
+    formatted_lvlmessage1 = fonte.render(lvlmessage1, True, 'purple')
     screen.blit(formatted_startmessage, (220, 250))
-    screen.blit(formatted_lvlmessage1, (140, 160))
-    if pygame.key.get_pressed()[K_c]:
+    screen.blit(formatted_lvlmessage1, (70, 160))
+    if pygame.key.get_pressed()[K_SPACE]:
         start = False
     pygame.display.update()
 
 
 def restartAndMessage():
+    global begin
     die = True
+    begin = True
     while die:
         screen.fill((255,255,255))
         screen.blit(formatted_gameOver,(100, height/2 - 90))
@@ -103,28 +113,87 @@ def restartAndMessage():
                 pygame.quit()
                 exit()
             if event.type == KEYDOWN:
-                if event.key == K_r:
+                if event.key == K_SPACE:
                     die = False
                     restartAll()
-            
+
+
+def restartGameLvl3():
+    global pontos, snakelist, snakelength, x, y, headlist, die, speed, lvl1loop
+
+    speed = 5
+    pontos = 0
+    snakelength = 5
+    x = 800
+    y = 640
+
+    headlist = []
+    snakelist = []
+    die = False
+    lvl1loop
 
 def buildObstacle():
-   global randXa, randXb, randYa
+   global randXa, randXb, randYa, x_m, y_m
    rect1 = pygame.draw.rect(screen, (0, 0, 255), (110, 80, 80, 500))
    rect2 = pygame.draw.rect(screen, (0, 0, 255), (660, 80, 80, 500))
-   randXa = 200
-   randXb = 570
+
 
    if snake.colliderect(rect1):
        restartAndMessage()
    if snake.colliderect(rect2):
        restartAndMessage()
 
+   if apple.colliderect(rect1):
+       x_m = random.randint(randXa, randXb)
+       y_m = random.randint(randYa, randYb)
+
+   if apple.colliderect(rect2):
+       x_m = random.randint(randXa, randXb)
+       y_m = random.randint(randYa, randYb)
+        
+
+       
+
+def buildObstacle2():
+   global randXa, randXb, randYa, rect1, rect2, x_m, snakelength, speed, y_m, rect3
+   rect1 = pygame.draw.rect(screen, (255, 0, 255), (80, 80, 80, 500))
+   rect2 = pygame.draw.rect(screen, (255, 0, 255), (360, 80, 80, 500))
+   rect3 = pygame.draw.rect(screen, (255, 0, 255), (680, 80, 80, 500))
+   
+
+   if apple.colliderect(rect1):
+       x_m = random.randint(randXa, randXb)
+       y_m = random.randint(randYa, randYb)
+
+   if apple.colliderect(rect2):
+       x_m = random.randint(randXa, randXb)
+       y_m = random.randint(randYa, randYb)
+
+
+   if snake.colliderect(rect1):
+       restartAndMessage()
+   if snake.colliderect(rect2):
+       restartAndMessage()
+   if snake.colliderect(rect3):
+       restartAndMessage()
+
+   if snake.colliderect(apple):
+       x_m  = choice([i for i in range(0, 800) if i not in range(120, 710)])
+       print(x_m)
+       y_m = random.randint(randYa, randYb)
+
+
 x_m = random.randint(randXa, randXb)
-y_m = random.randint(randYa, randYb) 
+y_m = random.randint(randYa, randYb)
+
+
 
 interact = True
 obstaclerun = False
+obstaclerun2 = False
+begin = True
+
+
 while True:
 
     #initial screen#
@@ -138,15 +207,17 @@ while True:
 
 
     screen.fill('white')
+
     snake = pygame.draw.rect(screen, (0, 255, 0), (x, y, snakesize, snakesize))
+  
     apple = pygame.draw.rect(screen, (255, 0, 0), (x_m, y_m, applesize, applesize))
 
 
     '''text-messages'''
     message = f'Points: {pontos}'
     lvlmessage2 = f'get 20 points and watchout for the obstacles'
-    lvlmessage2b = f'press c to continue'
-    gameOverMessage = f'Você perdeu, aperte \'r\' para reiniciar'
+    lvlmessage2b = f'press SPACE to continue'
+    gameOverMessage = f'Game over, press SPACE to restart'
     formatted_gameOver = fonte.render(gameOverMessage, True, 'black')
     formatted_text = fonte.render(message, True, 'black')
 
@@ -201,7 +272,7 @@ while True:
                     pygame.quit()
                     exit()
                 if event.type == KEYDOWN:
-                    if event.key == K_c:
+                    if event.key == K_SPACE:
                         lvl1loop = False
 
             screen.fill('white')
@@ -211,8 +282,35 @@ while True:
 
         buildObstacle()
 
+    if begin == True:
+        if pontos == 10:
+            lvl2 = False
+            begin = False
+            obstaclerun = False
+            obstaclerun2 = True
+            restartGameLvl3()
+            #termina level1 e começa lvl3
            
-        
+
+    if obstaclerun2 == True:
+        while lvl2loop:
+            screen.fill('white')
+            lvl1looptext = fonte.render(lvlmessage2, True, 'black')
+            screen.blit(lvl1looptext, (10, 300))
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        lvl2loop = False
+
+        buildObstacle2()
+
+
+
     if x > width:
         x = 0
     if x < -40:
@@ -239,6 +337,7 @@ while True:
         while die:
             restartAndMessage()
 
+    
     if snake.colliderect(apple):
         x_m = random.randint(randXa, randXb)
         y_m = random.randint(randYa, randYb)
