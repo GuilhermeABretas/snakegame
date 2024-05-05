@@ -2,4 +2,5 @@
 
 
 
-![snakegame2](https://github.com/GuilhermeABretas/snakegame/assets/141572842/1a383b51-6233-4ceb-9dec-e42aa23a23ee)
+
+![snakegamescaled](https://github.com/GuilhermeABretas/snakegame/assets/141572842/133c1a49-960c-4639-a13a-ae0908775a31)
