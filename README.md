@@ -1,1 +1,1 @@
-that's a basic classick snakegame made using pygame library, I pretend to add many features like obstacles, level design etc. 
+just a remake of the classic snakegame with a grafical interface, added some additional features and lvls with obstacles
