@@ -1,4 +1,4 @@
-# A remake of the classic snakegame with a grafical interface, added some additional features and lvls with obstacles
+### A remake of the classic snakegame with a grafical interface, added some additional features and lvls with obstacles
 
 
 
