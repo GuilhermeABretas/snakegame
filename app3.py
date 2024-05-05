@@ -169,6 +169,11 @@ def buildObstacle2():
        x_m = random.randint(randXa, randXb)
        y_m = random.randint(randYa, randYb)
 
+   if apple.colliderect(rect3):
+       x_m = random.randint(randXa, randXb)
+       y_m = random.randint(randYa, randYb)
+
+
 
    if snake.colliderect(rect1):
        restartAndMessage()
